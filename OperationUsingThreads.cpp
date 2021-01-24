@@ -4,16 +4,17 @@
 #include "Core.hpp"
 #include "BasicTimer.hpp"
 #include "SumFinder.hpp"
+#include "DataGenerator.hpp"
 
 int main() {
 	int threadCount = 8;
 	ul lowerLimit = 1;
 	//ul upperLimit = 4294967295;
-	ul upperLimit = 5000;
+	ul upperLimit = 100;
 
 	//SumFinder& sumFinderInstance = SumFinder::init();
 
-	SumFinder::setSlowdownTime(100);
+	SumFinder::setSlowdownTime(64);
 	ull totalNT = SumFinder::getSumNT(lowerLimit, upperLimit);
 	ull totalT = SumFinder::getSumT(lowerLimit, upperLimit, threadCount);
 	ull totalAsy = SumFinder::getSumAsync(lowerLimit, upperLimit, threadCount);
@@ -21,6 +22,12 @@ int main() {
 	std::cout << "[  CHK  ] SumNT : " << totalNT << std::endl;
 	std::cout << "[  CHK  ] SumT  : " << totalT << std::endl;
 	std::cout << "[  CHK  ] SumAs : " << totalAsy << std::endl;
+
+	DataGenerator dg = DataGenerator();
+
+	for (ul idx = 0; idx < 32; ++idx) {
+		std::cout << dg.getInt() << std::endl;
+	}
 
 	std::cout << "--\nmain() successful!\n--\n";
 }

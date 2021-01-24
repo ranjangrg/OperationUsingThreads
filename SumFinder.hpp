@@ -6,7 +6,6 @@
 #include "Core.hpp"
 #include "BasicTimer.hpp"
 #include <thread>
-#include <chrono>
 #include <future>
 
 class SumFinder {

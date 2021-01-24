@@ -9,18 +9,14 @@
 #include <chrono>
 #include <future>
 
-#define SLOWDOWN 0
-#define SLOWDOWN_TIME 100
-
 class SumFinder {
 private:
-	bool haveSlowdown;
-	int slowdownTime;
 	static SumFinder currentInstance;
-	SumFinder(bool haveSlowdown, int slowdownTime) :
-		haveSlowdown(haveSlowdown), slowdownTime(slowdownTime) {};
-	SumFinder() : SumFinder(false, 0) {};
-	SumFinder(int slowdownTime) : SumFinder(true, slowdownTime) {};
+
+	int slowdownTime;
+	
+	SumFinder(int slowdownTime) : slowdownTime(slowdownTime) {};
+	SumFinder() : SumFinder(0) {};
 
 	void _slowdown(ul currentIdx);
 
@@ -40,6 +36,9 @@ private:
 public:
 	SumFinder(const SumFinder&) = delete;
 	static SumFinder& init();
+
+	void static setSlowdownTime(int slowdownTime);
+	int static getSlowdownTime();
 
 	void static slowdown(ul currentIdx);
 

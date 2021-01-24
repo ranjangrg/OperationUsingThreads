@@ -1,13 +1,11 @@
 // OperationUsingThreads.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include "Core.h"
-#include "BasicTimer.h"
-#include <thread>
-#include <chrono>
-#include <future>
+#include "Core.hpp"
+#include "BasicTimer.hpp"
+#include "SumFinder.hpp"
 
-#define SLOWDOWN 1
+#define SLOWDOWN 0
 #define SLOWDOWN_TIME 100
 
 void slowdown(ul currentIdx) {
@@ -17,9 +15,8 @@ void slowdown(ul currentIdx) {
 }
 
 /* Brute force algorithm */
-ull getSumNT(ul upperLimit) {
+ull getSumNT(ul lowerLimit, ul upperLimit) {
 	ull total = 0;
-	ul lowerLimit = 1;
 	BasicTimer timer;
 	timer.start();
 		for (ul currNum = lowerLimit; currNum <= upperLimit; ++currNum) {
@@ -55,7 +52,7 @@ void getPartialSum(ul lowerLimit, ul upperLimit, std::promise<ull>&& prms) { // 
 	*/
 }
 
-ull getSumT(ul upperLimit, int threadCount) {
+ull getSumT(ul lowerLimit, ul upperLimit, int threadCount) {
 	ull total = 0;
 	BasicTimer timer;
 	timer.start();
@@ -67,7 +64,7 @@ ull getSumT(ul upperLimit, int threadCount) {
 		ul incrementValue = upperLimit / threadCount;
 		if (upperLimit % threadCount) { ++incrementValue; }	// making sure we overflow upperLimit
 
-		ul currentNumber = 1;
+		ul currentNumber = lowerLimit;
 		for (int threadIdx = 0; threadIdx < threadCount; ++threadIdx) {
 			partialSumFtr.at(threadIdx) = partialSumPrms.at(threadIdx).get_future();
 			ul upperNumber = currentNumber + incrementValue;
@@ -100,7 +97,7 @@ ull getPartialSumAsync(ul lowerLimit, ul upperLimit) { // move expects rvalue re
 	return total;
 }
 
-ull getSumAsync(ul upperLimit, int threadCount) {
+ull getSumAsync(ul lowerLimit, ul upperLimit, int threadCount) {
 	ull total = 0;
 	BasicTimer timer;
 	timer.start();
@@ -110,7 +107,7 @@ ull getSumAsync(ul upperLimit, int threadCount) {
 	ul incrementValue = upperLimit / threadCount;
 	if (upperLimit % threadCount) { ++incrementValue; }	// making sure we overflow upperLimit
 
-	ul currentNumber = 1;
+	ul currentNumber = lowerLimit;
 	for (int threadIdx = 0; threadIdx < threadCount; ++threadIdx) {
 		ul upperNumber = currentNumber + incrementValue;
 		if (upperNumber > upperLimit) { upperNumber = upperLimit; }
@@ -131,18 +128,26 @@ ull getSumAsync(ul upperLimit, int threadCount) {
 }
 
 int main() {
-	int threadCount = 16;
+	/*
+	int threadCount = 8;
+	ul lowerLimit = 1;
 	//ul upperLimit = 4294967295;
-	ul upperLimit = 65536;
-	ull totalNT = getSumNT(upperLimit);
-	ull totalT = getSumT(upperLimit, threadCount);
-	ull totalAsy = getSumAsync(upperLimit, threadCount);
+	ul upperLimit = 429496729;
+	ull totalNT = getSumNT(lowerLimit, upperLimit);
+	ull totalT = getSumT(lowerLimit, upperLimit, threadCount);
+	ull totalAsy = getSumAsync(lowerLimit, upperLimit, threadCount);
 
 	std::cout << "[  LOG  ] SumNT : " << totalNT << std::endl;
 	std::cout << "[  LOG  ] SumT  : " << totalT << std::endl;
 	std::cout << "[  LOG  ] SumAs : " << totalAsy << std::endl;
+	*/
 
-	std::cout << "--\nExecution successful!\n--\n";
+	//SumFinder& sumFinderInstance = SumFinder::init();
+
+	SumFinder::slowdown(0);
+	//sumFinderInstance.slowdown(0);
+
+	std::cout << "--\nmain() successful!\n--\n";
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

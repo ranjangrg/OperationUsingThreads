@@ -1,5 +1,8 @@
 #pragma once
-#include "Core.h"
+#ifndef __BASIC_TIMER_HPP
+#define __BASIC_TIMER_HPP
+
+#include "Core.hpp"
 #include <chrono>
 
 class BasicTimer {
@@ -15,3 +18,5 @@ public:
 	//auto endTime = std::chrono::high_resolution_clock::now();
 	//auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
 };
+
+#endif

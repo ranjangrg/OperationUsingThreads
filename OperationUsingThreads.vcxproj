@@ -141,10 +141,12 @@
   <ItemGroup>
     <ClCompile Include="BasicTimer.cpp" />
     <ClCompile Include="OperationUsingThreads.cpp" />
+    <ClCompile Include="SumFinder.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicTimer.h" />
-    <ClInclude Include="Core.h" />
+    <ClInclude Include="BasicTimer.hpp" />
+    <ClInclude Include="Core.hpp" />
+    <ClInclude Include="SumFinder.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

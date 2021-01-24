@@ -1,4 +1,4 @@
-#include "BasicTimer.h"
+#include "BasicTimer.hpp"
 
 BasicTimer::BasicTimer() {
 	this->duration = std::chrono::milliseconds::zero();

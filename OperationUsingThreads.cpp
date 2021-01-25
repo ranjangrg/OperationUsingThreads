@@ -6,28 +6,41 @@
 #include "SumFinder.hpp"
 #include "DataGenerator.hpp"
 
+bool testSumFinder() {
+	bool testPassed = true;
+	try {
+		int threadCount = 8;
+		ul lowerLimit = 1;
+		//ul upperLimit = 4294967295;
+		ul upperLimit = 100;
+
+		//SumFinder& sumFinderInstance = SumFinder::init();
+
+		SumFinder::setSlowdownTime(64);
+		ull totalNT = SumFinder::getSumNT(lowerLimit, upperLimit);
+		ull totalT = SumFinder::getSumT(lowerLimit, upperLimit, threadCount);
+		ull totalAsy = SumFinder::getSumAsync(lowerLimit, upperLimit, threadCount);
+
+		std::cout << "[  CHK  ] SumNT : " << totalNT << std::endl;
+		std::cout << "[  CHK  ] SumT  : " << totalT << std::endl;
+		std::cout << "[  CHK  ] SumAs : " << totalAsy << std::endl;
+	}
+	catch (...) {
+		testPassed = false;
+	}
+	return testPassed;
+}
+
 int main() {
-	int threadCount = 8;
-	ul lowerLimit = 1;
-	//ul upperLimit = 4294967295;
-	ul upperLimit = 100;
-
-	//SumFinder& sumFinderInstance = SumFinder::init();
-
-	SumFinder::setSlowdownTime(64);
-	ull totalNT = SumFinder::getSumNT(lowerLimit, upperLimit);
-	ull totalT = SumFinder::getSumT(lowerLimit, upperLimit, threadCount);
-	ull totalAsy = SumFinder::getSumAsync(lowerLimit, upperLimit, threadCount);
-
-	std::cout << "[  CHK  ] SumNT : " << totalNT << std::endl;
-	std::cout << "[  CHK  ] SumT  : " << totalT << std::endl;
-	std::cout << "[  CHK  ] SumAs : " << totalAsy << std::endl;
+	std::unordered_map<std::string, bool> testResults;
+	testResults["sumFinder"] = testSumFinder();
 
 	DataGenerator dg = DataGenerator();
+	int dataCount = 64;
+	std::vector<int> dataset = dg.getDataset(dataCount);
 
-	for (ul idx = 0; idx < 32; ++idx) {
-		std::cout << dg.getInt() << std::endl;
-	}
+	core::printVec(dataset, 8, 8);
+	core::printTestResults(testResults);
 
 	std::cout << "--\nmain() successful!\n--\n";
 }

@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BasicTimer.cpp" />
+    <ClCompile Include="Core.cpp" />
     <ClCompile Include="DataGenerator.cpp" />
     <ClCompile Include="OperationUsingThreads.cpp" />
     <ClCompile Include="SumFinder.cpp" />

@@ -19,6 +19,7 @@ public:
 	DataGenerator() : DataGenerator(LOWER_LIMIT, UPPER_LIMIT) {};
 	//~DataGenerator();
 	int getInt();
+	std::vector<int> getDataset(int numCount);
 };
 
 #endif

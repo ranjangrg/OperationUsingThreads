@@ -10,16 +10,18 @@
 #define LOWER_LIMIT 0
 #define UPPER_LIMIT 50000
 
+// generally type 'T' is int OR ul
+template <typename T>
 class DataGenerator {
 private:
 	std::default_random_engine generator;
-	std::uniform_int_distribution<int> dist;
+	std::uniform_int_distribution<T> dist;
 public:
-	DataGenerator(int lowerLimit, int upperLimit);
+	DataGenerator(T lowerLimit, T upperLimit);
 	DataGenerator() : DataGenerator(LOWER_LIMIT, UPPER_LIMIT) {};
 	//~DataGenerator();
-	int getInt();
-	std::vector<int> getDataset(int numCount);
+	T getInt();
+	std::vector<T> getDataset(T numCount);
 };
 
 #endif

@@ -35,9 +35,9 @@ int main() {
 	std::unordered_map<std::string, bool> testResults;
 	testResults["sumFinder"] = testSumFinder();
 
-	DataGenerator dg = DataGenerator();
+	DataGenerator<ul> dg = DataGenerator<ul>();
 	int dataCount = 64;
-	std::vector<int> dataset = dg.getDataset(dataCount);
+	std::vector<ul> dataset = dg.getDataset(dataCount);
 
 	core::printVec(dataset, 8, 8);
 	core::printTestResults(testResults);

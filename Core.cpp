@@ -2,7 +2,7 @@
 
 template <typename T>
 void core::printVec(std::vector<T>& vect, int digitWidth, int columnCount) {
-	int dataCount = vect.size();
+	ul dataCount = (ul)(vect.size());
 	for (ul idx = 0; idx < dataCount; ++idx) {
 		std::cout << std::setw(digitWidth) << vect.at(idx);
 		if (((idx + 1) % columnCount) == 0) { std::cout << std::endl; }

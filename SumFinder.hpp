@@ -19,19 +19,26 @@ private:
 
 	void _slowdown(ul currentIdx);
 
+	/* Natural sequence: +1 */
 	/* Brute force algorithm */
-	ull _getSumNT(ul lowerLimit, ul upperLimit);
+	ull _getNaturalSumNT(ul lowerLimit, ul upperLimit);
 
 	/* Partial Sum (threading) algorithm */
-	void _getPartialSum(ul lowerLimit, ul upperLimit, std::promise<ull>&& prms);
+	void _getNaturalPartialSum(ul lowerLimit, ul upperLimit, std::promise<ull>&& prms);
 
-	ull _getSumT(ul lowerLimit, ul upperLimit, int threadCount);
+	ull _getNaturalSumT(ul lowerLimit, ul upperLimit, int threadCount);
 
 	/* Partial Sum (async) algorithm */
-	ull _getPartialSumAsync(ul lowerLimit, ul upperLimit);	// move expects rvalue ref: &&
+	ull _getNaturalPartialSumAsync(ul lowerLimit, ul upperLimit);	// move expects rvalue ref: &&
 
-	ull _getSumAsync(ul lowerLimit, ul upperLimit, int threadCount);
+	ull _getNaturalSumAsync(ul lowerLimit, ul upperLimit, int threadCount);
 
+	/* Dataset methods */
+	ull _getDatasetSumNT(const std::vector<ul>& dataset);
+	void _getDatasetPartialSum(
+		const std::vector<ul>& dataset, 
+		ul startIdx, ul endIdx, std::promise<ull>&& prms);
+	ull _getDatasetSumT(const std::vector<ul>& dataset, int threadCount);
 public:
 	SumFinder(const SumFinder&) = delete;
 	static SumFinder& init();
@@ -40,19 +47,28 @@ public:
 	int static getSlowdownTime();
 
 	void static slowdown(ul currentIdx);
+	void static sleep(int milsec);
 
 	/* Brute force algorithm */
-	ull static getSumNT(ul lowerLimit, ul upperLimit);
+	ull static getNaturalSumNT(ul lowerLimit, ul upperLimit);
 
 	/* Partial Sum (threading) algorithm */
-	void static getPartialSum(ul lowerLimit, ul upperLimit, std::promise<ull>&& prms);
+	void static getNaturalPartialSum(ul lowerLimit, ul upperLimit, std::promise<ull>&& prms);
 
-	ull static getSumT(ul lowerLimit, ul upperLimit, int threadCount);
+	ull static getNaturalSumT(ul lowerLimit, ul upperLimit, int threadCount);
 
 	/* Partial Sum (async) algorithm */
-	ull static getPartialSumAsync(ul lowerLimit, ul upperLimit);	// move expects rvalue ref: &&
+	ull static getNaturalPartialSumAsync(ul lowerLimit, ul upperLimit);	// move expects rvalue ref: &&
 
-	ull static getSumAsync(ul lowerLimit, ul upperLimit, int threadCount);
+	ull static getNaturalSumAsync(ul lowerLimit, ul upperLimit, int threadCount);
+
+	ull static getDatasetSumNT(const std::vector<ul>& dataset);
+
+	void static getDatasetPartialSum(
+		const std::vector<ul>& dataset, 
+		ul startIdx, ul endIdx, std::promise<ull>&& prms);
+
+	ull static getDatasetSumT(const std::vector<ul>& dataset, int threadCount);
 };
 
 #endif

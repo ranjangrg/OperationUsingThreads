@@ -13,7 +13,7 @@ DataGenerator<T>::~DataGenerator() {
 */
 
 template <typename T>
-T DataGenerator<T>::getInt() {
+T DataGenerator<T>::getNext() {
 	//auto val = std::bind(this->dist, this->generator);
 	return this->dist(this->generator);
 }
@@ -23,7 +23,7 @@ std::vector<T> DataGenerator<T>::getDataset(T numCount) {
 	std::vector<T> dataset;
 	dataset.reserve(numCount);
 	for (int idx = 0; idx < numCount; ++idx) {
-		dataset.push_back(this->getInt());
+		dataset.push_back(this->getNext());
 	}
 	return std::move(dataset);	// C++11 'moves' local vector on return
 }

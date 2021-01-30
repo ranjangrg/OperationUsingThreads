@@ -20,7 +20,7 @@ public:
 	DataGenerator(T lowerLimit, T upperLimit);
 	DataGenerator() : DataGenerator(LOWER_LIMIT, UPPER_LIMIT) {};
 	//~DataGenerator();
-	T getInt();
+	T getNext();
 	std::vector<T> getDataset(T numCount);
 };
 

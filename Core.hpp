@@ -13,7 +13,8 @@ typedef unsigned long long ull;
 typedef unsigned long ul;
 
 namespace core {
-	void printVec(std::vector<int>& vect, int digitWidth, int columnCount);
+	template <typename T>
+	void printVec(std::vector<T>& vect, int digitWidth, int columnCount);
 	void printTestResults(std::unordered_map<std::string, bool>& dict);
 }
 

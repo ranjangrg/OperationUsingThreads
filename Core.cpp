@@ -1,6 +1,7 @@
 #include "Core.hpp"
 
-void core::printVec(std::vector<int>& vect, int digitWidth, int columnCount) {
+template <typename T>
+void core::printVec(std::vector<T>& vect, int digitWidth, int columnCount) {
 	int dataCount = vect.size();
 	for (ul idx = 0; idx < dataCount; ++idx) {
 		std::cout << std::setw(digitWidth) << vect.at(idx);
@@ -15,3 +16,9 @@ void core::printTestResults(std::unordered_map<std::string, bool>& dict) {
 		std::cout << "[ " << result << " ]: " << currTest.first << std::endl;
 	}
 }
+
+
+// explicit instantitation of template methods
+// ref: https://en.cppreference.com/w/cpp/language/class_template#Explicit_instantiation
+template void core::printVec(std::vector<int>& vect, int digitWidth, int columnCount);
+template void core::printVec(std::vector<ul>& vect, int digitWidth, int columnCount);

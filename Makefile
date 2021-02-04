@@ -11,7 +11,7 @@ HDR=$(SRC:.cpp=.hpp)
 
 MAIN_SRC=OperationUsingThreads.cpp	# its headerfile not yet implemented
 
-main: $(SRC) $(HDR)
+main: $(SRC) $(HDR) $(MAIN_SRC)
 	$(CC) -std=$(STD) $(CFLAGS) $(SRC) $(MAIN_SRC) -o main
 
 clean:

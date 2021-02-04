@@ -12,11 +12,11 @@ bool testSumFinderNatural() {
 		int threadCount = 8;
 		ul lowerLimit = 1;
 		//ul upperLimit = 4294967295;
-		ul upperLimit = 10000;
+		ul upperLimit = 100;
 
 		//SumFinder& sumFinderInstance = SumFinder::init();
 
-		SumFinder::setSlowdownTime(100);
+		SumFinder::setSlowdownTime(10);
 		ull totalNaturalNT = SumFinder::getNaturalSumNT(lowerLimit, upperLimit);
 		ull totalNaturalT = SumFinder::getNaturalSumT(lowerLimit, upperLimit, threadCount);
 		ull totalNaturalAsy = SumFinder::getNaturalSumAsync(lowerLimit, upperLimit, threadCount);
@@ -41,6 +41,7 @@ bool testSumFinderDataset() {
 	int threadCount = 16;
 	std::vector<ul> dataset = dg.getDataset(dataCount);
 	//core::printVec(dataset, 8, 8);
+	SumFinder::setSlowdownTime(100);
 	
 	try {
 		ull totalDatasetNT = SumFinder::getDatasetSumNT(dataset);

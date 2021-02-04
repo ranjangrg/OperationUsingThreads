@@ -1,18 +1,8 @@
 #include "SumFinder.hpp"
 
-#define SLOWDOWN 0
-#define SLOWDOWN_TIME 100
-
-#define SLEEP_TIME 500	// in milliseconds
-
 SumFinder SumFinder::currentInstance;	// define this static member (ONCE!)
 
 // private methods
-void SumFinder::_slowdown(ul currentIdx) {
-	if ((currentIdx % 100) == 0) {
-		std::this_thread::sleep_for(std::chrono::milliseconds(this->getSlowdownTime()));
-	}
-}
 
 /* Brute force algorithm */
 ull SumFinder::_getNaturalSumNT(ul lowerLimit, ul upperLimit) {
@@ -20,8 +10,7 @@ ull SumFinder::_getNaturalSumNT(ul lowerLimit, ul upperLimit) {
 	BasicTimer timer;
 	timer.start();
 	for (ul currNum = lowerLimit; currNum <= upperLimit; ++currNum) {
-		if (this->getSlowdownTime() > 0) { this->slowdown(currNum); }
-		total += currNum;
+		total = add(total, currNum);
 	}
 	timer.end();
 	double duration = timer.getDuration();
@@ -39,11 +28,10 @@ void SumFinder::_getNaturalPartialSum(
 	BasicTimer timer;
 	timer.start();
 	for (ul currNum = lowerLimit; currNum <= upperLimit; ++currNum) {
-		if (this->getSlowdownTime() > 0) { this->slowdown(currNum); }
-		total += currNum;
+		total = add(total, currNum);
 	}
 	timer.end();
-	double duration = timer.getDuration();
+	//double duration = timer.getDuration();
 	prms.set_value(total);
 	/*
 	try {
@@ -88,7 +76,7 @@ ull SumFinder::_getNaturalSumT(ul lowerLimit, ul upperLimit, int threadCount) {
 
 	for (int threadIdx = 0; threadIdx < threadCount; ++threadIdx) {
 		partialSums.at(threadIdx) = partialSumFtr.at(threadIdx).get();
-		total += partialSums.at(threadIdx);
+		total = add(total, partialSums.at(threadIdx));
 	}
 	timer.end();
 	double duration = timer.getDuration();
@@ -102,8 +90,7 @@ ull SumFinder::_getNaturalSumT(ul lowerLimit, ul upperLimit, int threadCount) {
 ull SumFinder::_getNaturalPartialSumAsync(ul lowerLimit, ul upperLimit) { // move expects rvalue ref: &&
 	ull total = 0;
 	for (ul currNum = lowerLimit; currNum <= upperLimit; ++currNum) {
-		if (this->getSlowdownTime() > 0) { this->slowdown(currNum); }
-		total += currNum;
+		total = add(total, currNum);
 	}
 	return total;
 }
@@ -132,7 +119,7 @@ ull SumFinder::_getNaturalSumAsync(ul lowerLimit, ul upperLimit, int threadCount
 
 	for (int threadIdx = 0; threadIdx < threadCount; ++threadIdx) {
 		partialSums.at(threadIdx) = partialSumFtr.at(threadIdx).get();
-		total += partialSums.at(threadIdx);
+		total = add(total, partialSums.at(threadIdx));
 	}
 	timer.end();
 	double duration = timer.getDuration();
@@ -147,9 +134,7 @@ ull SumFinder::_getDatasetSumNT(const std::vector<ul>& dataset) {
 	BasicTimer timer;
 	timer.start();
 	for (const ul currNum : dataset) {
-		total += currNum;
-		// DELETE ME:
-		this->sleep(SLEEP_TIME);
+		total = add(total, currNum);
 	}
 	timer.end();
 	double duration = timer.getDuration();
@@ -169,12 +154,10 @@ void SumFinder::_getDatasetPartialSum(
 	timer.start();
 		// partition dataset first
 		for (ul currIdx = startIdx; currIdx <= endIdx; ++currIdx) {
-			total += dataset.at(currIdx);
-			// DELETE ME:
-			this->sleep(SLEEP_TIME);
+			total = add(total, dataset.at(currIdx));
 		}
 	timer.end();
-	double duration = timer.getDuration();
+	//double duration = timer.getDuration();
 	prms.set_value(total);
 }
 
@@ -212,7 +195,7 @@ ull SumFinder::_getDatasetSumT(const std::vector<ul>& dataset, int _threadCount)
 
 		for (ul threadIdx = 0; threadIdx < threadCount; ++threadIdx) {
 			partialSums.at(threadIdx) = partialSumFtr.at(threadIdx).get();
-			total += partialSums.at(threadIdx);
+			total = add(total, partialSums.at(threadIdx));
 		}
 	timer.end();
 	double duration = timer.getDuration();
@@ -227,28 +210,28 @@ SumFinder& SumFinder::init() {
 	return currentInstance;
 }
 
-void SumFinder::setSlowdownTime(int slowdownTime) {
-	init().slowdownTime = slowdownTime;
+void SumFinder::setSlowdownTime(int slowdownTimeInMillisec) {
+	init().slowdownTime = slowdownTimeInMillisec;
 }
 
 int SumFinder::getSlowdownTime() {
 	return init().slowdownTime;
 }
 
-void SumFinder::slowdown(ul currentIdx) { 
-	init()._slowdown(currentIdx); 
+void SumFinder::sleep() {
+	std::this_thread::sleep_for(std::chrono::milliseconds(getSlowdownTime()));
 }
 
-void SumFinder::sleep(int milsec) {
-	std::this_thread::sleep_for(std::chrono::milliseconds(milsec));
+ull SumFinder::add(ull numA, ull numB) {
+	ull sum = numA + numB;
+	sleep();
+	return sum;
 }
 
-/* Brute force algorithm */
 ull SumFinder::getNaturalSumNT(ul lowerLimit, ul upperLimit) {
 	return init()._getNaturalSumNT(lowerLimit, upperLimit);
 }
 
-/* Partial Sum (threading) algorithm */
 void SumFinder::getNaturalPartialSum(
 	ul lowerLimit, ul upperLimit, 
 	std::promise<ull>&& prms
@@ -260,7 +243,6 @@ ull SumFinder::getNaturalSumT(ul lowerLimit, ul upperLimit, int threadCount) {
 	return init()._getNaturalSumT(lowerLimit, upperLimit, threadCount);
 }
 
-/* Partial Sum (async) algorithm */
 ull SumFinder::getNaturalPartialSumAsync(ul lowerLimit, ul upperLimit) {	// move expects rvalue ref: &&
 	return init()._getNaturalPartialSumAsync(lowerLimit, upperLimit);
 }

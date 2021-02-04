@@ -11,8 +11,10 @@ void core::printVec(std::vector<T>& vect, int digitWidth, int columnCount) {
 }
 
 void core::printTestResults(std::unordered_map<std::string, bool>& dict) {
+	std::string result;
+	std::cout << "Test Results:" << std::endl;
 	for (const auto& currTest: dict) {
-	std::string result = currTest.second ? " PASS" : "FAIL";
+		result = currTest.second ? " PASS" : "FAIL";
 		std::cout << "[ " << result << " ]: " << currTest.first << std::endl;
 	}
 }

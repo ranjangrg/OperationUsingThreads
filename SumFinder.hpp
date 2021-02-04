@@ -14,10 +14,8 @@ private:
 
 	int slowdownTime;
 	
-	SumFinder(int slowdownTime) : slowdownTime(slowdownTime) {};
+	SumFinder(int slowdownTimeInMillisec) : slowdownTime(slowdownTimeInMillisec) {};
 	SumFinder() : SumFinder(0) {};
-
-	void _slowdown(ul currentIdx);
 
 	/* Natural sequence: +1 */
 	/* Brute force algorithm */
@@ -39,15 +37,16 @@ private:
 		const std::vector<ul>& dataset, 
 		ul startIdx, ul endIdx, std::promise<ull>&& prms);
 	ull _getDatasetSumT(const std::vector<ul>& dataset, int threadCount);
+
 public:
 	SumFinder(const SumFinder&) = delete;
 	static SumFinder& init();
 
-	void static setSlowdownTime(int slowdownTime);
+	void static setSlowdownTime(int slowdownTimeInMillisec);
 	int static getSlowdownTime();
+	void static sleep();
 
-	void static slowdown(ul currentIdx);
-	void static sleep(int milsec);
+	ull static add(ull numA, ull numB);	// incl. artificial sleep to simulate heavy load/proccessing
 
 	/* Brute force algorithm */
 	ull static getNaturalSumNT(ul lowerLimit, ul upperLimit);

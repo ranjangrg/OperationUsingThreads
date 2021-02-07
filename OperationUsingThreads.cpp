@@ -5,6 +5,7 @@
 #include "BasicTimer.hpp"
 #include "SumFinder.hpp"
 #include "DataGenerator.hpp"
+#include "BankAccount.hpp"
 
 bool testSumFinderNatural() {
 	bool testPassed = false;
@@ -58,10 +59,50 @@ bool testSumFinderDataset() {
 	return testPassed;
 }
 
+bool testMutex() {
+	bool testPassed = false;
+
+	try {
+		BankAccount cust;
+		cust.printBalance();
+
+		// passsing BankAccount obj as ref because it contains a mutex (non-copyable)
+		// as a private class member
+		std::thread threadDeposit1(&BankAccount::deposit, std::ref(cust), 100.0);
+		std::thread threadWithdraw1(&BankAccount::withdraw, std::ref(cust), 20.0);
+		std::thread threadWithdraw2(&BankAccount::withdraw, std::ref(cust), 95.0);
+		std::thread threadDeposit2(&BankAccount::deposit, std::ref(cust), 10.0);
+
+		threadDeposit1.join();
+		threadWithdraw1.join();
+		threadWithdraw2.join();
+		threadDeposit2.join();
+
+		/*
+		threadDeposit1.detach();
+		threadWithdraw1.detach();
+		threadWithdraw2.detach();
+		threadDeposit2.detach();
+		*/
+
+		cust.printBalance();
+
+		testPassed = true;
+	} catch(...) {
+		testPassed = false;
+	}
+	
+	return testPassed;
+}
+
 int main() {
+	
 	std::unordered_map<std::string, bool> testResults;
+	/*
 	testResults["sumFinderNatural"] = testSumFinderNatural();
 	testResults["sumFinderDataset"] = testSumFinderDataset();
+	*/
+	testResults["mutexTest"] = testMutex();
 
 	/*
 	DataGenerator<ul> dg = DataGenerator<ul>();
@@ -74,6 +115,7 @@ int main() {
 	core::printTestResults(testResults);
 
 	std::cout << "--\nmain() successful!\n--\n";
+	return 1;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

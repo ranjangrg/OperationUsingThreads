@@ -6,10 +6,12 @@ SRC=BasicTimer.cpp
 SRC+=Core.cpp
 SRC+=DataGenerator.cpp
 SRC+=SumFinder.cpp
+SRC+=BankAccount.cpp
 
 HDR=$(SRC:.cpp=.hpp)
 
-MAIN_SRC=OperationUsingThreads.cpp	# its headerfile not yet implemented
+# its headerfile not yet implemented
+MAIN_SRC=OperationUsingThreads.cpp
 
 main: $(SRC) $(HDR) $(MAIN_SRC)
 	$(CC) -std=$(STD) $(CFLAGS) $(SRC) $(MAIN_SRC) -o main

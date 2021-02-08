@@ -60,38 +60,50 @@ bool testSumFinderDataset() {
 }
 
 bool testMutex() {
-	bool testPassed = false;
+	bool testPassed = true;
 
-	try {
-		BankAccount cust;
-		cust.printBalance();
+	std::vector<double> transactionAmount = {50, -20, -40};
+	// Possible closing balance: £10 or £30 or £50 (all 3! possibilities)
+	std::vector<double> possibleClosingBalance = {10, 30, 50};
 
-		// passsing BankAccount obj as ref because it contains a mutex (non-copyable)
-		// as a private class member
-		std::thread threadDeposit1(&BankAccount::deposit, std::ref(cust), 100.0);
-		std::thread threadWithdraw1(&BankAccount::withdraw, std::ref(cust), 20.0);
-		std::thread threadWithdraw2(&BankAccount::withdraw, std::ref(cust), 95.0);
-		std::thread threadDeposit2(&BankAccount::deposit, std::ref(cust), 10.0);
+	int threadCount = transactionAmount.size();
+	int testCount = 3 * 2;	// to cover all permutation (3! factorial for 3 transactions)
 
-		threadDeposit1.join();
-		threadWithdraw1.join();
-		threadWithdraw2.join();
-		threadDeposit2.join();
+	for (int testIdx = 0; testIdx < testCount && testPassed; ++testIdx) {	
+		try {
+			BankAccount cust;
+			cust.printBalance();
 
-		/*
-		threadDeposit1.detach();
-		threadWithdraw1.detach();
-		threadWithdraw2.detach();
-		threadDeposit2.detach();
-		*/
+			std::vector<std::thread> threadVec;
+			threadVec.reserve(threadCount);
 
-		cust.printBalance();
+			for (int idx = 0; idx < threadCount; ++idx) {
+				double absAmount = std::abs(transactionAmount.at(idx));
+				// passsing 'BankAccount' obj as ref because it contains a mutex (non-copyable)
+				// as a private class member, BUT thread() 'copies' the agruments and
+				// passes it to the callback method/function
+				if (transactionAmount.at(idx) > 0) {
+					threadVec.emplace_back(&BankAccount::deposit, std::ref(cust), absAmount);
+				} else {
+					threadVec.emplace_back(&BankAccount::withdraw, std::ref(cust), absAmount);
+				}
+				//threadVec.at(idx).join();
+			}
 
-		testPassed = true;
-	} catch(...) {
-		testPassed = false;
-	}
-	
+			for (int idx = 0; idx < threadCount; ++idx) {
+				threadVec.at(idx).join();
+			}
+
+			double closingBalance = cust.getBalance();
+			std::cout << "[ LOG ] Closing Balance: £" << closingBalance << std::endl;
+
+			for (int idx = 0; (idx < possibleClosingBalance.size()) && !testPassed; ++idx) {
+				testPassed = possibleClosingBalance.at(idx) == closingBalance;
+			}
+		} catch(...) {
+			testPassed = false;
+		}
+	}	
 	return testPassed;
 }
 

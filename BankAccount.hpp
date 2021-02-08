@@ -7,6 +7,7 @@
 #include <chrono>
 #include <thread>
 #include <mutex>
+#include <cmath>
 
 namespace Transaction {
     enum status {SUCCESS, DEPOSIT_FAILED, FAILED_INSUFFICIENT_FUNDS};
@@ -21,6 +22,7 @@ public:
     //~BankAccount();
     void printBalance();
     double getBalance();
+    void setBalance(double newBalance);
     Transaction::status deposit(double depositAmount);
     Transaction::status withdraw(double withdrawAmount);
 

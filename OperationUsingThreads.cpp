@@ -15,8 +15,6 @@ bool testSumFinderNatural() {
 		//ul upperLimit = 4294967295;
 		ul upperLimit = 100;
 
-		//SumFinder& sumFinderInstance = SumFinder::init();
-
 		SumFinder::setSlowdownTime(10);
 		ull totalNaturalNT = SumFinder::getNaturalSumNT(lowerLimit, upperLimit);
 		ull totalNaturalT = SumFinder::getNaturalSumT(lowerLimit, upperLimit, threadCount);
@@ -110,26 +108,12 @@ bool testMutex() {
 int main() {
 	
 	std::unordered_map<std::string, bool> testResults;
-	/*
 	testResults["sumFinderNatural"] = testSumFinderNatural();
 	testResults["sumFinderDataset"] = testSumFinderDataset();
-	*/
 	testResults["mutexTest"] = testMutex();
-
-	/*
-	DataGenerator<ul> dg = DataGenerator<ul>();
-	int dataCount = 64;
-	std::vector<ul> dataset = dg.getDataset(dataCount);
-
-	core::printVec(dataset, 8, 8);
-	*/
 
 	core::printTestResults(testResults);
 
 	std::cout << "--\nmain() successful!\n--\n";
 	return 1;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-

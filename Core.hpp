@@ -9,6 +9,8 @@
 #include <vector>
 #include <unordered_map>
 
+#include <cassert>
+
 typedef unsigned long long ull;
 typedef unsigned long ul;
 

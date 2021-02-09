@@ -1,13 +1,13 @@
 #include "BankAccount.hpp"
 
-#define TRANSACTION_DELAY 500
+#define TRANSACTION_DELAY 50
 
 BankAccount::BankAccount() {
     this->setBalance(0);
 }
 
-void BankAccount::printBalance() {
-    std::cout << "[ LOG ] Balance: £" << this->getBalance() << std::endl;
+void BankAccount::printBalance(const std::string& msg) {
+    std::cout << "[ LOG ] " << msg << ": £" << this->getBalance() << std::endl;
 }
 
 double BankAccount::getBalance() {
@@ -24,30 +24,39 @@ void BankAccount::setBalance(double newBalance) {
 }
 
 Transaction::status BankAccount::deposit(double depositAmount) {
+    assert(depositAmount > 0);
+    std::string output;
     Transaction::status transactionCode = Transaction::SUCCESS;
-    std::cout << "[ DEPOSIT  ] (£" << depositAmount << ")" << std::endl;
+    // output casted to 'int' only to fit transactions within same line
+    output +=  "(+£" + std::to_string((int)depositAmount);
     try {
         double newBalance = this->getBalance() + depositAmount;
         this->setBalance(newBalance);
     } catch(...) {
         transactionCode = Transaction::DEPOSIT_FAILED;
-        std::cout << "[ ERR ] Deposit failed!" << std::endl;
+        output += "->D.ERR!";
     }
+    output += "), ";
+    std::cout << output;
 
     return transactionCode;
 }
 
 Transaction::status BankAccount::withdraw(double withdrawAmount) {
+    assert(withdrawAmount > 0);
     Transaction::status transactionCode = Transaction::SUCCESS;
-    
+    std::string output;
     double newBalance = this->getBalance() - withdrawAmount;
-    std::cout << "[ WITHDRAW ] (£" << withdrawAmount << ")" << std::endl;
+    // output casted to 'int' only to fit transactions within same line
+    output +=  "(-£" + std::to_string((int)withdrawAmount);
     if (newBalance > 0) {
         this->setBalance(newBalance);
     } else {
-        std::cout << "[ ERR ] Failed to withdraw £" << withdrawAmount << "! Insufficient funds." << std::endl;
+        output += "->W.ERR!";
         transactionCode = Transaction::FAILED_INSUFFICIENT_FUNDS;
     }
+    output += "), ";
+    std::cout << output;
 
     return transactionCode;
 }

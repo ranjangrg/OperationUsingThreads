@@ -6,6 +6,7 @@ SumFinder SumFinder::currentInstance;	// define this static member (ONCE!)
 
 /* Brute force algorithm */
 ull SumFinder::_getNaturalSumNT(ul lowerLimit, ul upperLimit) {
+	assert(upperLimit > lowerLimit);
 	ull total = 0;
 	BasicTimer timer;
 	timer.start();
@@ -24,6 +25,7 @@ void SumFinder::_getNaturalPartialSum(
 	ul lowerLimit, ul upperLimit, 
 	std::promise<ull>&& prms	// move expects rvalue ref: &&
 ) {
+	assert(upperLimit > lowerLimit);
 	ull total = 0;
 	BasicTimer timer;
 	timer.start();
@@ -44,6 +46,10 @@ void SumFinder::_getNaturalPartialSum(
 }
 
 ull SumFinder::_getNaturalSumT(ul lowerLimit, ul upperLimit, int threadCount) {
+	assert(
+		(upperLimit > lowerLimit) &&
+		(threadCount > 0)	
+	);
 	ull total = 0;
 	BasicTimer timer;
 	timer.start();
@@ -88,6 +94,7 @@ ull SumFinder::_getNaturalSumT(ul lowerLimit, ul upperLimit, int threadCount) {
 
 /* Partial Sum (async) algorithm: same as 'SumFinder::_getSumNT()' */
 ull SumFinder::_getNaturalPartialSumAsync(ul lowerLimit, ul upperLimit) { // move expects rvalue ref: &&
+	assert(upperLimit > lowerLimit);
 	ull total = 0;
 	for (ul currNum = lowerLimit; currNum <= upperLimit; ++currNum) {
 		total = add(total, currNum);
@@ -96,6 +103,10 @@ ull SumFinder::_getNaturalPartialSumAsync(ul lowerLimit, ul upperLimit) { // mov
 }
 
 ull SumFinder::_getNaturalSumAsync(ul lowerLimit, ul upperLimit, int threadCount) {
+	assert(
+		(upperLimit > lowerLimit) &&
+		(threadCount > 0)	
+	);
 	ull total = 0;
 	BasicTimer timer;
 	timer.start();
@@ -130,6 +141,7 @@ ull SumFinder::_getNaturalSumAsync(ul lowerLimit, ul upperLimit, int threadCount
 }
 
 ull SumFinder::_getDatasetSumNT(const std::vector<ul>& dataset) {
+	//assert(dataset.size() > 0);	// allow empty vectors??
 	ull total = 0;
 	BasicTimer timer;
 	timer.start();
@@ -162,6 +174,7 @@ void SumFinder::_getDatasetPartialSum(
 }
 
 ull SumFinder::_getDatasetSumT(const std::vector<ul>& dataset, int _threadCount) {
+	assert(_threadCount > 0);
 	ull total = 0;
 	ul datasetSize = (ul)(dataset.size());
 	ul threadCount = (ul)_threadCount;

@@ -20,7 +20,7 @@ private:
 public:
     BankAccount();
     //~BankAccount();
-    void printBalance();
+    void printBalance(const std::string& msg);
     double getBalance();
     void setBalance(double newBalance);
     Transaction::status deposit(double depositAmount);

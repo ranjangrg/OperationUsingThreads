@@ -67,13 +67,15 @@ bool testMutex() {
 	int threadCount = transactionAmount.size();
 	int testCount = 3 * 2;	// to cover all permutation (3! factorial for 3 transactions)
 
-	for (int testIdx = 0; testIdx < testCount && testPassed; ++testIdx) {	
+	for (int testIdx = 0; testIdx < testCount && testPassed; ++testIdx) {
 		try {
 			BankAccount cust;
-			cust.printBalance();
+			cust.printBalance("Initial Balance");
 
 			std::vector<std::thread> threadVec;
 			threadVec.reserve(threadCount);
+
+			std::cout << "[ TRANSACTION ]: ";
 
 			for (int idx = 0; idx < threadCount; ++idx) {
 				double absAmount = std::abs(transactionAmount.at(idx));
@@ -93,7 +95,7 @@ bool testMutex() {
 			}
 
 			double closingBalance = cust.getBalance();
-			std::cout << "[ LOG ] Closing Balance: £" << closingBalance << std::endl;
+			std::cout << std::endl << "[ LOG ] Closing Balance: £" << closingBalance << std::endl;
 
 			for (int idx = 0; (idx < possibleClosingBalance.size()) && !testPassed; ++idx) {
 				testPassed = possibleClosingBalance.at(idx) == closingBalance;
